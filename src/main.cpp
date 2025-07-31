@@ -99,12 +99,13 @@ int main()
 {
     double bestDistance;
     float bestPitch;
-    Vec3d intial_position = Vec3d(0, 50, 0);
+    Vec3d intial_position = Vec3d(0, 150, 0);
     for (float pitch = -90; pitch < 90; pitch += 0.01)
     {
         GlidingPlayer player(pitch, intial_position);
-        int i = 0;
-        while (!player.simulateTick()) {}
+        while (!player.simulateTick())
+        {
+        }
         double distance = player.getPos().z;
         if (distance > bestDistance)
         {
