@@ -30,61 +30,84 @@ std::ostream &operator<<(std::ostream &stream, Vec3d &vector)
     return stream << "(" << vector.x << " " << vector.y << " " << vector.z << ")";
 }
 
-Vec3d getRotationVector(float pitch, float yaw)
+class GlidingPlayer
 {
-    float f = pitch * (float)(M_PI / 180.0);
-    float g = -yaw * (float)(M_PI / 180.0);
-    float h = cos(g);
-    float i = sin(g);
-    float j = cos(f);
-    float k = sin(f);
-    return Vec3d(i * j, -k, h * j);
-}
-
-Vec3d simulateFlight(Vec3d position, float pitch)
-{
-    float yaw{};
-    Vec3d oldVelocity(0, 0, 0);
-    while (position.y > 0)
+public:
+    float pitch;
+    GlidingPlayer(float pitch, Vec3d initial_position) : pos(initial_position), velocity(0, 0, 0)
+    {
+        this->pitch = pitch;
+        this->pos = initial_position;
+    }
+    Vec3d getPos()
+    {
+        return pos;
+    }
+    /**
+     * Simulate a single tick of elytra gliding.
+     *
+     * @return `true` if the player has went below Y = 0 after this tick, `false` otherwise.
+     */
+    bool simulateTick()
     {
         Vec3d vec3d = getRotationVector(pitch, yaw);
         float f = pitch * (float)(M_PI / 180.0);
         double d = sqrt(vec3d.x * vec3d.x + vec3d.z * vec3d.z);
-        double e = oldVelocity.horizontalLength();
+        double e = velocity.horizontalLength();
         double g = 0.08; // Minecraft's gravity constant
         double h = pow(cos(f), 2);
-        oldVelocity = oldVelocity.add(0.0, g * (-1.0 + h * 0.75), 0.0);
-        if (oldVelocity.y < 0.0 && d > 0.0)
+        velocity = velocity.add(0.0, g * (-1.0 + h * 0.75), 0.0);
+        if (velocity.y < 0.0 && d > 0.0)
         {
-            double i = oldVelocity.y * -0.1 * h;
-            oldVelocity = oldVelocity.add(vec3d.x * i / d, i, vec3d.z * i / d);
+            double i = velocity.y * -0.1 * h;
+            velocity = velocity.add(vec3d.x * i / d, i, vec3d.z * i / d);
         }
 
         if (f < 0.0F && d > 0.0)
         {
             double i = e * -sin(f) * 0.04;
-            oldVelocity = oldVelocity.add(-vec3d.x * i / d, i * 3.2, -vec3d.z * i / d);
+            velocity = velocity.add(-vec3d.x * i / d, i * 3.2, -vec3d.z * i / d);
         }
 
         if (d > 0.0)
         {
-            oldVelocity = oldVelocity.add((vec3d.x / d * e - oldVelocity.x) * 0.1, 0.0, (vec3d.z / d * e - oldVelocity.z) * 0.1);
+            velocity = velocity.add((vec3d.x / d * e - velocity.x) * 0.1, 0.0, (vec3d.z / d * e - velocity.z) * 0.1);
         }
 
-        oldVelocity = oldVelocity.multiply(0.99F, 0.98F, 0.99F);
-        position = position.add(oldVelocity.x, oldVelocity.y, oldVelocity.z);
+        velocity = velocity.multiply(0.99F, 0.98F, 0.99F);
+        pos = pos.add(velocity.x, velocity.y, velocity.z);
+        return pos.y <= 0;
     }
-    return position;
-}
+
+private:
+    Vec3d pos;
+    Vec3d velocity;
+    float yaw = 0;
+    Vec3d getRotationVector(float pitch, float yaw)
+    {
+        float f = pitch * (float)(M_PI / 180.0);
+        float g = -yaw * (float)(M_PI / 180.0);
+        float h = cos(g);
+        float i = sin(g);
+        float j = cos(f);
+        float k = sin(f);
+        return Vec3d(i * j, -k, h * j);
+    }
+};
 
 int main()
 {
     double bestDistance;
     float bestPitch;
+    Vec3d intial_position = Vec3d(0, 50, 0);
     for (float pitch = -90; pitch < 90; pitch += 0.01)
     {
-        double distance = simulateFlight(Vec3d(0, 50, 0), pitch).z;
-        if (distance > bestDistance) {
+        GlidingPlayer player(pitch, intial_position);
+        int i = 0;
+        while (!player.simulateTick()) {}
+        double distance = player.getPos().z;
+        if (distance > bestDistance)
+        {
             bestDistance = distance;
             bestPitch = pitch;
         }
