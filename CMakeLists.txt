@@ -11,5 +11,5 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(matplotplusplus)
 
 include_directories(src/)
-add_executable(main src/main.cpp)
-target_link_libraries(main PUBLIC matplot)
+add_executable(static_angle src/static_angle.cpp)
+target_link_libraries(static_angle PUBLIC matplot)

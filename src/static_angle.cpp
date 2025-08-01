@@ -6,7 +6,6 @@ using namespace std;
 
 int main()
 {
-    Vec3d intial_position = Vec3d(0, 150, 0);
     double bestDistance;
     float bestPitch;
     vector<double> pitches;
@@ -14,11 +13,11 @@ int main()
     ofstream log("out.txt");
     for (float pitch = -20; pitch < 20; pitch += 0.01)
     {
-        GlidingPlayer player(pitch, intial_position);
-        while (!player.simulateTick())
-        {
-        }
-        double distance = player.getPos().z;
+        Vec3d position(0, 150, 0);
+        Vec3d velocity(0, 0, 0);
+        while (position.y > 0)
+            simulateTick(position, velocity, pitch);
+        double distance = position.z;
         if (distance > bestDistance)
         {
             bestDistance = distance;
