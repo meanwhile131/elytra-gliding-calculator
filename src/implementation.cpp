@@ -11,7 +11,8 @@ public:
         this->y = y;
         this->z = z;
     }
-    double length() {
+    double length()
+    {
         return sqrt(x * x + y * y + z * z);
     }
     double horizontalLength()
@@ -21,6 +22,18 @@ public:
     Vec3d add(double x, double y, double z)
     {
         return Vec3d(this->x + x, this->y + y, this->z + z);
+    }
+    Vec3d &operator+=(const Vec3d &other)
+    {
+        this->x += other.x;
+        this->y += other.y;
+        this->z += other.z;
+        return *this;
+    }
+    Vec3d operator+(const Vec3d &b)
+    {
+        *this += b;
+        return *this;
     }
     Vec3d multiply(double x, double y, double z)
     {
