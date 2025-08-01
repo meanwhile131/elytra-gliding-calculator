@@ -5,12 +5,6 @@
 #include <optional>
 using namespace std;
 
-struct FlightConfiguration {
-    Vec3d position;
-    Vec3d velocity;
-    float pitch;
-};
-
 int main()
 {
     double bestDistance;
@@ -22,22 +16,21 @@ int main()
     Vec3d position(0, 100, 0);
     Vec3d velocity(0, 0, 0);
     while (position.z < 2000 && position.y > 0) {
-        FlightConfiguration best{position, velocity, 0};
-        double bestSpeed;
+        Vec3d best_velocity(0, 0, 0);
+        float best_pitch;
         for (float pitch = -90; pitch < 90; pitch += 0.01)
         {
-            Vec3d new_position = position;
-            Vec3d new_velocity = velocity;
-            simulateTick(new_position, new_velocity, pitch);
-            if (new_velocity.z > best.velocity.z)
+            Vec3d new_velocity = calcGlidingVelocity(velocity, pitch);
+            if (new_velocity.z > best_velocity.z)
             {
-                best = FlightConfiguration {new_position, new_velocity, pitch};
+                best_velocity = new_velocity;
+                best_pitch = pitch;
             }
         }
-        log << best.position << " " << best.velocity << " " << best.pitch << "\n";
-        cout << best.position << " " << best.velocity << " " << best.pitch << "\n";
-        position = best.position;
-        velocity = best.velocity;
+        velocity = best_velocity;
+        position = position.add(best_velocity.x, best_velocity.y, best_velocity.z);
+        log << position << " " << velocity << " " << best_pitch << "\n";
+        cout << position << " " << velocity << " " << best_pitch << "\n";;
     }
     log.close();
     return 0;

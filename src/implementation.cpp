@@ -11,6 +11,9 @@ public:
         this->y = y;
         this->z = z;
     }
+    double length() {
+        return sqrt(x * x + y * y + z * z);
+    }
     double horizontalLength()
     {
         return sqrt(x * x + z * z);
@@ -43,9 +46,9 @@ namespace
     }
 }
 /**
- * Simulate a single tick of elytra gliding.
+ * Calculate velocity after one tick of elytra flight
  */
-void simulateTick(Vec3d &position, Vec3d &velocity, float pitch)
+Vec3d calcGlidingVelocity(Vec3d velocity, float pitch)
 {
     float yaw{};
     Vec3d vec3d = getRotationVector(pitch, yaw);
@@ -72,6 +75,5 @@ void simulateTick(Vec3d &position, Vec3d &velocity, float pitch)
         velocity = velocity.add((vec3d.x / d * e - velocity.x) * 0.1, 0.0, (vec3d.z / d * e - velocity.z) * 0.1);
     }
 
-    velocity = velocity.multiply(0.99F, 0.98F, 0.99F);
-    position = position.add(velocity.x, velocity.y, velocity.z);
+    return velocity.multiply(0.99F, 0.98F, 0.99F);
 }

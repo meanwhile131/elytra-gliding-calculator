@@ -16,7 +16,10 @@ int main()
         Vec3d position(0, 150, 0);
         Vec3d velocity(0, 0, 0);
         while (position.y > 0)
-            simulateTick(position, velocity, pitch);
+        {
+            velocity = calcGlidingVelocity(velocity, pitch);
+            position = position.add(velocity.x, velocity.y, velocity.z);
+        }
         double distance = position.z;
         if (distance > bestDistance)
         {
@@ -25,7 +28,7 @@ int main()
         }
         pitches.push_back(pitch);
         distances.push_back(distance);
-        log << "Pitch: " << pitch << " Distance:" << distance << "\n";
+        log << "Pitch: " << pitch << " Distance: " << distance << "\n";
     }
     log << "Best pitch is " << bestPitch << " for " << bestDistance << "\n";
     log.close();
