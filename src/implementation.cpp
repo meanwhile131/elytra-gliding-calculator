@@ -36,7 +36,6 @@ public:
     GlidingPlayer(float pitch, Vec3d initial_position) : pos(initial_position), velocity(0, 0, 0)
     {
         this->pitch = pitch;
-        this->pos = initial_position;
     }
     Vec3d getPos()
     {
