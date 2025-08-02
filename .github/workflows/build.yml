@@ -20,7 +20,7 @@ jobs:
       id: cache-cmake
       uses: actions/cache@v4
       with:
-        path: build/
+        path: ${{github.workspace}}/build
         key: ${{ runner.os }}-build-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-build-
