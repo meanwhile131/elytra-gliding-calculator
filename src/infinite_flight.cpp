@@ -27,7 +27,7 @@ Trajectory bestDownTrajectory(Vec3d starting_position, Vec3d starting_velocity)
         Vec3d position = starting_position;
         Vec3d velocity = starting_velocity;
         vector<Vec3d> positions{};
-        while (position.y > 10)
+        while (position.y > 3)
         {
             velocity = calcGlidingVelocity(velocity, pitch);
             position += velocity;
@@ -54,7 +54,7 @@ UpTrajectory bestUpTrajectory(Vec3d starting_position, Vec3d starting_velocity)
             Vec3d position = starting_position;
             Vec3d velocity = starting_velocity;
             vector<Vec3d> positions{};
-            while ((velocity.y > 0 || position.y < 15) && position.y > 0)
+            while ((velocity.y > 0 || position.y < 5) && position.y > 0)
             {
                 velocity = calcGlidingVelocity(velocity, pitch);
                 position += velocity;
@@ -75,7 +75,7 @@ UpTrajectory bestUpTrajectory(Vec3d starting_position, Vec3d starting_velocity)
 
 int main()
 {
-    ofstream log("out.txt");
+    ofstream log("log.txt");
 
     Vec3d position(0, starting_height, 0);
     Vec3d velocity(0, 0, 0);

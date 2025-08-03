@@ -10,7 +10,7 @@ int main()
     float bestPitch;
     vector<double> pitches;
     vector<double> distances;
-    ofstream log("out.txt");
+    ofstream log("log.txt");
     for (float pitch = -20; pitch < 20; pitch += 0.01)
     {
         Vec3d position(0, 150, 0);

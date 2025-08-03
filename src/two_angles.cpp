@@ -6,7 +6,7 @@ using namespace std;
 
 int main()
 {
-    ofstream log("out.txt");
+    ofstream log("log.txt");
 
     double bestDistance = -INFINITY;
     float best_pitch_up{};

@@ -11,7 +11,7 @@ int main()
     float bestPitch;
     vector<double> pitches;
     vector<double> distances;
-    ofstream log("out.txt");
+    ofstream log("log.txt");
 
     Vec3d position(0, 100, 0);
     Vec3d velocity(0, 0, 0);
