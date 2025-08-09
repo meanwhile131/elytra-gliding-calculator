@@ -4,6 +4,7 @@ project(ElytraGliding)
 
 add_subdirectory(matplotplusplus)
 include_directories(src/)
+add_compile_options(-Wall -Wextra -Wpedantic)
 add_executable(static_angle src/static_angle.cpp)
 target_link_libraries(static_angle PUBLIC matplot)
 add_executable(dynamic_angle src/dynamic_angle.cpp)

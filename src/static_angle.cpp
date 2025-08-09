@@ -6,8 +6,8 @@ using namespace std;
 
 int main()
 {
-    double bestDistance;
-    float bestPitch;
+    double bestDistance{};
+    float bestPitch{};
     vector<double> pitches;
     vector<double> distances;
     ofstream log("log.txt");

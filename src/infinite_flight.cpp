@@ -6,7 +6,7 @@
 #include <optional>
 using namespace std;
 
-const double starting_height = 60;
+const double starting_height = 50;
 struct Trajectory
 {
     float pitch;
@@ -79,22 +79,21 @@ int main()
 
     Vec3d position(0, starting_height, 0);
     Vec3d velocity(0, 0, 0);
-    float pitch;
     vector<Vec3d> positions{position};
-    while (position.y > 0 && position.z < 2000)
+    while (position.y > 0 && position.z < 4000)
     {
         Trajectory down = bestDownTrajectory(position, velocity);
         log << "Down pitch: " << down.pitch << "\n";
         positions.insert(positions.end(), down.positions.begin(), down.positions.end());
         position = down.positions.back();
         velocity = down.velocity;
-        log << position << "\n";
+        log << position << " " << velocity << "\n";
         UpTrajectory up = bestUpTrajectory(position, velocity);
         log << "Up pitch: " << up.pitch << " with delta " << up.pitch_delta << " degrees/tick\n";
         positions.insert(positions.end(), up.positions.begin(), up.positions.end());
         position = up.positions.back();
         velocity = up.velocity;
-        log << position << "\n";
+        log << position << " " << velocity << "\n";
     }
     log.close();
     {
