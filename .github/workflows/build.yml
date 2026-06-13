@@ -30,4 +30,4 @@ jobs:
         cd build
         git add log.txt graph.png
         git commit -m "Update output for $GITHUB_SHA"
-        git push --force 
+        git push --force origin output
