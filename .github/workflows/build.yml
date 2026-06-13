@@ -15,3 +15,17 @@ jobs:
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
     - name: Build
       run: cmake --build ${{github.workspace}}/build
+    - name: Run
+      run: |
+        cd build
+        ./infinite-flight
+    - name: Push outputs
+      if: github.ref == 'refs/heads/main'
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git switch --orphan -c output
+        cd build
+        git add log.txt graph.png
+        git commit -m "Update output for $GITHUB_SHA"
+        git push --force 
