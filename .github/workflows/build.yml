@@ -18,7 +18,7 @@ jobs:
     - name: Run
       run: |
         cd build
-        ./infinite-flight
+        ./infinite_flight
     - name: Push outputs
       if: github.ref == 'refs/heads/main'
       run: |
